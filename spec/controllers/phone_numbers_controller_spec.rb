@@ -68,34 +68,39 @@ RSpec.describe PhoneNumbersController, type: :controller do
   end
 
   describe "POST #create" do
-    context "with valid params" do
-      it "creates a new PhoneNumber" do
-        expect {
+    describe 'with valid params' do
+      let(:alice) { Person.create(first_name: 'Alice', last_name: 'What') }
+      let(:valid_attributes) {{number: '555-8888', person_id: alice.id}}
+
+      context "with valid params" do
+        it "creates a new PhoneNumber" do
+          expect {
+            post :create, {:phone_number => valid_attributes}, valid_session
+          }.to change(PhoneNumber, :count).by(1)
+        end
+
+        it "assigns a newly created phone_number as @phone_number" do
           post :create, {:phone_number => valid_attributes}, valid_session
-        }.to change(PhoneNumber, :count).by(1)
+          expect(assigns(:phone_number)).to be_a(PhoneNumber)
+          expect(assigns(:phone_number)).to be_persisted
+        end
+
+        it "redirects to the created phone_number" do
+          post :create, {:phone_number => valid_attributes}, valid_session
+          expect(response).to redirect_to(alice)
+        end
       end
 
-      it "assigns a newly created phone_number as @phone_number" do
-        post :create, {:phone_number => valid_attributes}, valid_session
-        expect(assigns(:phone_number)).to be_a(PhoneNumber)
-        expect(assigns(:phone_number)).to be_persisted
-      end
+      context "with invalid params" do
+        it "assigns a newly created but unsaved phone_number as @phone_number" do
+          post :create, {:phone_number => invalid_attributes}, valid_session
+          expect(assigns(:phone_number)).to be_a_new(PhoneNumber)
+        end
 
-      it "redirects to the created phone_number" do
-        post :create, {:phone_number => valid_attributes}, valid_session
-        expect(response).to redirect_to(PhoneNumber.last)
-      end
-    end
-
-    context "with invalid params" do
-      it "assigns a newly created but unsaved phone_number as @phone_number" do
-        post :create, {:phone_number => invalid_attributes}, valid_session
-        expect(assigns(:phone_number)).to be_a_new(PhoneNumber)
-      end
-
-      it "re-renders the 'new' template" do
-        post :create, {:phone_number => invalid_attributes}, valid_session
-        expect(response).to render_template("new")
+        it "re-renders the 'new' template" do
+          post :create, {:phone_number => invalid_attributes}, valid_session
+          expect(response).to render_template("new")
+        end
       end
     end
   end
