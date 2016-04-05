@@ -1,4 +1,4 @@
 class EmailAddress < ActiveRecord::Base
-	validates :email, presence: true
+	validates :email, :person_id, presence: true
 	belongs_to :person
 end

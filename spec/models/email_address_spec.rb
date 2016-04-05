@@ -7,8 +7,13 @@ RSpec.describe EmailAddress, type: :model do
 		expect(email_address).to be_valid
 	end
 
-	it 'is invalid' do
+	it 'is invalid without email' do
 		email_address.email = nil
+		expect(email_address).to_not be_valid
+	end
+
+	it 'is invalid without person_id' do
+		email_address.person_id = nil
 		expect(email_address).to_not be_valid
 	end
 end
