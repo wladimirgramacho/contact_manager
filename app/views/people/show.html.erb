@@ -21,6 +21,8 @@
 <ul>
 	<% @person.email_addresses.each do |address| %>
 		<li><%= address.email %>
+			<%= link_to('edit', edit_email_address_path(address)) %> | 
+			<%= link_to('delete', email_address_path(address), :method => 'delete') %>
 		</li>
 	<% end %>
 </ul>

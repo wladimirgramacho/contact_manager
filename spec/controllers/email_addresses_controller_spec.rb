@@ -68,34 +68,40 @@ RSpec.describe EmailAddressesController, type: :controller do
   end
 
   describe "POST #create" do
-    context "with valid params" do
-      it "creates a new EmailAddress" do
-        expect {
+    describe 'with valid params' do
+      let(:ingrid) {Person.create(first_name: 'Ingrid', last_name: 'Linda!')}
+      let(:valid_attributes) {{ email:'ingrid@gmail.com', person_id: ingrid.id}}
+
+
+      context "with valid params" do
+        it "creates a new EmailAddress" do
+          expect {
+            post :create, {:email_address => valid_attributes}, valid_session
+          }.to change(EmailAddress, :count).by(1)
+        end
+
+        it "assigns a newly created email_address as @email_address" do
           post :create, {:email_address => valid_attributes}, valid_session
-        }.to change(EmailAddress, :count).by(1)
+          expect(assigns(:email_address)).to be_a(EmailAddress)
+          expect(assigns(:email_address)).to be_persisted
+        end
+
+        it "redirects to the created email_address" do
+          post :create, {:email_address => valid_attributes}, valid_session
+          expect(response).to redirect_to(ingrid)
+        end
       end
 
-      it "assigns a newly created email_address as @email_address" do
-        post :create, {:email_address => valid_attributes}, valid_session
-        expect(assigns(:email_address)).to be_a(EmailAddress)
-        expect(assigns(:email_address)).to be_persisted
-      end
+      context "with invalid params" do
+        it "assigns a newly created but unsaved email_address as @email_address" do
+          post :create, {:email_address => invalid_attributes}, valid_session
+          expect(assigns(:email_address)).to be_a_new(EmailAddress)
+        end
 
-      it "redirects to the created email_address" do
-        post :create, {:email_address => valid_attributes}, valid_session
-        expect(response).to redirect_to(EmailAddress.last)
-      end
-    end
-
-    context "with invalid params" do
-      it "assigns a newly created but unsaved email_address as @email_address" do
-        post :create, {:email_address => invalid_attributes}, valid_session
-        expect(assigns(:email_address)).to be_a_new(EmailAddress)
-      end
-
-      it "re-renders the 'new' template" do
-        post :create, {:email_address => invalid_attributes}, valid_session
-        expect(response).to render_template("new")
+        it "re-renders the 'new' template" do
+          post :create, {:email_address => invalid_attributes}, valid_session
+          expect(response).to render_template("new")
+        end
       end
     end
   end
@@ -123,7 +129,7 @@ RSpec.describe EmailAddressesController, type: :controller do
       it "redirects to the email_address" do
         email_address = EmailAddress.create! valid_attributes
         put :update, {:id => email_address.to_param, :email_address => valid_attributes}, valid_session
-        expect(response).to redirect_to(email_address)
+        expect(response).to redirect_to(bobo)
       end
     end
 
@@ -143,17 +149,22 @@ RSpec.describe EmailAddressesController, type: :controller do
   end
 
   describe "DELETE #destroy" do
-    it "destroys the requested email_address" do
-      email_address = EmailAddress.create! valid_attributes
-      expect {
-        delete :destroy, {:id => email_address.to_param}, valid_session
-      }.to change(EmailAddress, :count).by(-1)
-    end
+    describe 'with valid params' do
+      let(:david) { Person.create(first_name: 'David', last_name: 'O')}
+      let(:valid_attributes) { {email: 'fdafdsa', person_id: david.id}}
 
-    it "redirects to the email_addresses list" do
-      email_address = EmailAddress.create! valid_attributes
-      delete :destroy, {:id => email_address.to_param}, valid_session
-      expect(response).to redirect_to(email_addresses_url)
+      it "destroys the requested email_address" do
+        email_address = EmailAddress.create! valid_attributes
+        expect {
+          delete :destroy, {:id => email_address.to_param}, valid_session
+        }.to change(EmailAddress, :count).by(-1)
+      end
+
+      it "redirects to the email_addresses list" do
+        email_address = EmailAddress.create! valid_attributes
+        delete :destroy, {:id => email_address.to_param}, valid_session
+        expect(response).to redirect_to(david)
+      end
     end
   end
 

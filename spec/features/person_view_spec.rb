@@ -53,7 +53,7 @@ describe 'the person view', type: :feature do
 			expect(page).to_not have_content(old_number)
 		end
 		
-		it 'adds a phone number' do
+		it 'adds a phone number and return to person show' do
 			page.click_link('Add phone number')
 			page.fill_in('Number', with: '555-8888')
 			page.click_button('Create Phone number')
@@ -69,7 +69,7 @@ describe 'the person view', type: :feature do
 			visit person_path(person)
 		end
 
-		it 'has LIs for each email address' do
+		it 'has a li for each email address' do
 			expect(page).to have_selector('li', text: 'antonio@gmail.com')
 		end
 
@@ -78,6 +78,48 @@ describe 'the person view', type: :feature do
 			page.click_link('Add email address')
 			expect(current_path).to eq(new_email_address_path)
 		end
+
+		it 'has links to edit email address' do
+			person.email_addresses.each do |address|
+				expect(page).to have_link('edit', href: edit_email_address_path(address))
+			end
+		end
+
+		it 'has links to delete email address' do
+			person.email_addresses.each do |address|
+			expect(page).to have_link('delete', href: email_address_path(address))
+			end
+		end
+
+		it 'ensures email address is destroyed entirely' do
+			address = person.email_addresses.first
+
+			first(:link, 'delete').click
+			expect(current_path).to eq(person_path(person))
+			expect(page).to_not have_content(address)
+		end
+
+		it 'edits an email address' do
+			address = person.email_addresses.first
+			old_address = address.email
+
+			first(:link, 'edit').click
+			page.fill_in('Email', with: 'foobar')
+			page.click_button('Update Email address')
+			expect(current_path).to eq(person_path(person))
+			expect(page).to have_content('foobar')
+			expect(page).to_not have_content(old_address)
+		end
+
+		it 'adds an email address and returns to person show' do
+			page.click_link('Add email address')
+			page.fill_in('Email', with: 'antonio1@gmail.com')
+			page.click_button('Create Email address')
+			expect(current_path).to eq(person_path(person))
+			expect(page).to have_content('antonio1@gmail.com')
+		end
+
+
 
 	end
 
