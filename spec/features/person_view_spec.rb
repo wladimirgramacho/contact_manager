@@ -118,9 +118,5 @@ describe 'the person view', type: :feature do
 			expect(current_path).to eq(person_path(person))
 			expect(page).to have_content('antonio1@gmail.com')
 		end
-
-
-
 	end
-
 end
