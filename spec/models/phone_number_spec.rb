@@ -11,7 +11,7 @@ RSpec.describe PhoneNumber, type: :model do
   		phone_number.number = nil
   		expect(phone_number).to_not be_valid
   	end
-  	it 'must have a reference to a contact' do
+  	it 'is invalid without a contact_id' do
   		phone_number.contact_id = nil
   		expect(phone_number).to_not be_valid
   	end
