@@ -18,7 +18,7 @@ class EmailAddressesController < ApplicationController
     respond_to do |format|
       if @email_address.save
         format.html { redirect_to @email_address.contact, notice: 'Email address was successfully created.' }
-        format.json { render :show, status: :created, location: @email_address }
+        format.json { render :show, status: :created, location: @email_address.contact }
       else
         format.html { render :new }
         format.json { render json: @email_address.errors, status: :unprocessable_entity }
@@ -32,7 +32,7 @@ class EmailAddressesController < ApplicationController
     respond_to do |format|
       if @email_address.update(email_address_params)
         format.html { redirect_to @email_address.contact, notice: 'Email address was successfully updated.' }
-        format.json { render :show, status: :ok, location: @email_address }
+        format.json { render :show, status: :ok, location: @email_address.contact }
       else
         format.html { render :edit }
         format.json { render json: @email_address.errors, status: :unprocessable_entity }
