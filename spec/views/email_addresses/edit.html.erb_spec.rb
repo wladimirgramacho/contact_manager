@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "email_addresses/edit", type: :view do
   let(:person) { Person.create(first_name: 'Alice', last_name: 'Bob') }
-  let(:email_address) { EmailAddress.new(contact_id: person.id, contact_type: 'Person', email: 'wladi@eu') }
+  let(:email_address) { EmailAddress.create!(contact_id: person.id, contact_type: 'Person', email: 'wladi@eu') }
   before(:each) do
     assign(:email_address, email_address)
   end
