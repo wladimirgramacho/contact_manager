@@ -1,16 +1,5 @@
 class EmailAddressesController < ApplicationController
-  before_action :set_email_address, only: [:show, :edit, :update, :destroy]
-
-  # GET /email_addresses
-  # GET /email_addresses.json
-  def index
-    @email_addresses = EmailAddress.all
-  end
-
-  # GET /email_addresses/1
-  # GET /email_addresses/1.json
-  def show
-  end
+  before_action :find_resource, only: [:edit, :update, :destroy]
 
   # GET /email_addresses/new
   def new
@@ -29,7 +18,7 @@ class EmailAddressesController < ApplicationController
     respond_to do |format|
       if @email_address.save
         format.html { redirect_to @email_address.contact, notice: 'Email address was successfully created.' }
-        format.json { render :show, status: :created, location: @email_address }
+        format.json { render :show, status: :created, location: @email_address.contact }
       else
         format.html { render :new }
         format.json { render json: @email_address.errors, status: :unprocessable_entity }
@@ -43,7 +32,7 @@ class EmailAddressesController < ApplicationController
     respond_to do |format|
       if @email_address.update(email_address_params)
         format.html { redirect_to @email_address.contact, notice: 'Email address was successfully updated.' }
-        format.json { render :show, status: :ok, location: @email_address }
+        format.json { render :show, status: :ok, location: @email_address.contact }
       else
         format.html { render :edit }
         format.json { render json: @email_address.errors, status: :unprocessable_entity }
@@ -62,10 +51,6 @@ class EmailAddressesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_email_address
-      @email_address = EmailAddress.find(params[:id])
-    end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def email_address_params
