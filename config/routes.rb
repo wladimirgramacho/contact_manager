@@ -6,6 +6,16 @@ Rails.application.routes.draw do
   resources :phone_numbers, :except => [:index, :show]
   
   resources :people
+
+  resource :sessions, :only => [:create]
+
+  get 'auth/:provider/callback' => 'sessions#create'
+
+  root to: 'companies#index'
+
+  get '/login' => redirect('/auth/twitter')
+
+  delete '/logout' => 'sessions#destroy', as: :logout
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
