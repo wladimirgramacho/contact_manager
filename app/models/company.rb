@@ -1,7 +1,7 @@
 class Company < ActiveRecord::Base
 	validates :name, presence: true
-	has_many :phone_numbers, as: :contact
-	has_many :email_addresses, as: :contact
+	include Contact
+	belongs_to :user
 	def to_s
 		"#{name}"		
 	end

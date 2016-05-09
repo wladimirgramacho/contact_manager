@@ -1,9 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Person, type: :model do
-	let(:person) do
-		Person.new(first_name: 'Alice', last_name: 'Smith')
-	end
+	let(:person) {Fabricate(:person)}
 
 	it 'is invalid without a first name' do
 		person.first_name = nil
@@ -31,6 +29,10 @@ RSpec.describe Person, type: :model do
 
 	it "convert to a string with first name last name" do
 		expect(person.to_s).to eq "Alice Smith"
+	end
+
+	it 'is a child of user' do
+		expect(person.user).to be_instance_of(User)
 	end
 
 

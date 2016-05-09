@@ -7,4 +7,7 @@ class User < ActiveRecord::Base
   		end
 		user
 	end
+
+	has_many :people
+	has_many :companies
 end
