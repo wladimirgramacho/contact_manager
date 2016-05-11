@@ -1,13 +1,16 @@
 require 'rails_helper'
+require 'support/omniauth.rb'
 
 describe 'the person view', type: :feature do
-	let(:person) {Person.create(first_name: 'John', last_name: 'What')}
+	let(:person) {Fabricate(:person)}
+	let(:user) { person.user }
 
 	describe '' do #phone numbers
 
 		before(:each) do
 			person.phone_numbers.create(number: '555-1234')
 			person.phone_numbers.create(number: '555-1334')
+			login_as(user)
 			visit person_path(person)
 		end
 
@@ -66,6 +69,7 @@ describe 'the person view', type: :feature do
 		before(:each) do
 			person.email_addresses.create(email: 'antonio@gmail.com')
 			person.email_addresses.create(email: 'cazalberto@gmail.com')
+			login_as(user)
 			visit person_path(person)
 		end
 

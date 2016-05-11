@@ -4,7 +4,15 @@ class CompaniesController < ApplicationController
   # GET /companies
   # GET /companies.json
   def index
-    @companies = Company.all
+    if current_user
+      @companies = current_user.companies
+    else
+      @companies = Company.all
+    end
+  end
+
+  def lookup_person
+    @companies = current_user.companies.find(params[:id])
   end
 
   # GET /companies/1

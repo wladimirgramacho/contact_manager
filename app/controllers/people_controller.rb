@@ -4,7 +4,11 @@ class PeopleController < ApplicationController
   # GET /people
   # GET /people.json
   def index
-    @people = Person.all
+    @people = current_user.people
+  end
+
+  def lookup_person
+    @person = current_user.people.find(params[:id])
   end
 
   # GET /people/1
@@ -16,7 +20,7 @@ class PeopleController < ApplicationController
   def new
     @person = Person.new
   end
-
+  
   # GET /people/1/edit
   def edit
   end
